@@ -3,6 +3,7 @@ version: 0.0.2
 inherits: ruudk/ubuntu14.04@1.0.0
 type: service
 platform: ubuntu@12.04
+no-response-timeout: 10
 description: |
   Wercker box with Ubuntu 12.04 upgraded to ubuntu 14.04, heroku cedar-14
   packages installed, ruby 2.1.5 via rbenv, postgres 9.3 with postgis support.
