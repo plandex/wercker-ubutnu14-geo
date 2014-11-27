@@ -32,8 +32,8 @@ script: |
   rbenv install 2.1.5
   rbenv rehash
   rbenv global 2.1.5
-  ruby --version
-  gem install bundler --no-rdoc --no-ri
-  gem install rgeo --no-rdoc --no-ri
-  ruby -e 'require "rgeo";puts "RGeo GEOS supported: #{RGeo::Geos.supported? ? "yes":"no"}"'
+  rbenv shell ruby --version
+  rbenv shell gem install bundler --no-rdoc --no-ri
+  rbenv shell gem install rgeo --no-rdoc --no-ri
+  rbenv shell ruby -e 'require "rgeo";puts "RGeo GEOS supported: #{RGeo::Geos.supported? ? "yes":"no"}"'
   rm -rf /tmp/*
