@@ -1,0 +1,34 @@
+name: ubuntu14-ruby-geo
+version: 0.0.1
+inherits: ruudk/ubuntu14.04@1.0.0
+type: service
+platform: ubuntu@12.04
+description: |
+  Wercker box with Ubuntu 12.04 upgraded to ubuntu 14.04, heroku cedar-14
+  packages installed, ruby 2.1.5 via rbenv, postgres 9.3 with postgis support.
+  GEOS and PROJ libraries available for rgeo gem. This box provides basic
+  environment for geo applications.
+keywords:
+  - geo
+  - ruby
+  - postgis
+  - geos
+script: |
+  sudo apt-get update -y
+  sudo apt-get install -y curl
+  curl -sL https://raw.githubusercontent.com/heroku/stack-images/master/bin/cedar-14.sh -o /tmp/cedar-14.sh
+  sudo /bin/bash /tmp/cedar-14.sh
+  sudo apt-get upgrade -y
+  curl -sL https://s3-us-west-2.amazonaws.com/plandex-heroku/cedar-14/proj-4.8.0-1.tar.gz -o /tmp/proj.tar.gz
+  curl -sL https://s3-us-west-2.amazonaws.com/plandex-heroku/cedar-14/geos-3.4.2-1.tar.gz -o /tmp/geos.tar.gz
+  sudo tar -zxf /tmp/proj.tar.gz -C /usr
+  sudo tar -zxf /tmp/geos.tar.gz -C /usr
+  sudo ldconfig
+  git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+  git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+  echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+  echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+  export PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)"
+  rbenv install 2.1.5 && rbenv rehash
+  ruby --version
+  rm /tmp/*
