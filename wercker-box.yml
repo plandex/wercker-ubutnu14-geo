@@ -26,7 +26,10 @@ script: |
   git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
   echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
   echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-  export PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)"
-  rbenv install 2.1.5 && rbenv rehash
+  source ~/.bashrc
+  rbenv install 2.1.5 && rbenv rehash && rbenv global 2.1.5
   ruby --version
+  gem install bundler --no-rdoc --no-ri
+  gem install rgeo --no-rdoc --no-ri
+  ruby -e 'require "rgeo";puts "RGeo GEOS supported: #{RGeo::Geos.supported? ? "yes":"no"}"'
   rm -rf /tmp/*
