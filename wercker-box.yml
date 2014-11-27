@@ -28,7 +28,9 @@ script: |
   echo 'eval "$(rbenv init -)"' >> ~/.bashrc
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
-  rbenv install 2.1.5 && rbenv rehash && rbenv global 2.1.5
+  rbenv install 2.1.5
+  rbenv rehash
+  rbenv global 2.1.5
   ruby --version
   gem install bundler --no-rdoc --no-ri
   gem install rgeo --no-rdoc --no-ri
