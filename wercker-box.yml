@@ -27,12 +27,13 @@ script: |
   git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
   echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
   echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-  sudo su -l $USER
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  rbenv init -
   rbenv install 2.1.5
   rbenv rehash
   rbenv global 2.1.5
-  ruby --version
-  gem install bundler --no-rdoc --no-ri
-  gem install rgeo --no-rdoc --no-ri
-  ruby -e 'require "rgeo";puts "RGeo GEOS supported: #{RGeo::Geos.supported? ? "yes":"no"}"'
+  ~/.rbenv/shims/ruby --version
+  ~/.rbenv/shims/gem install bundler --no-rdoc --no-ri
+  ~/.rbenv/shims/gem install rgeo --no-rdoc --no-ri
+  ~/.rbenv/shims/ruby -e 'require "rgeo";puts "RGeo GEOS supported: #{RGeo::Geos.supported? ? "yes":"no"}"'
   rm -rf /tmp/*
