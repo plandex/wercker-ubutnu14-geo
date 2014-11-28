@@ -1,19 +1,24 @@
 name: ubuntu14-ruby-geo
-version: 0.0.2
+version: 0.1.0
 inherits: ruudk/ubuntu14.04@1.0.0
-type: service
+type: main
 platform: ubuntu@12.04
 no-response-timeout: 10
 description: |
-  Wercker box with Ubuntu 12.04 upgraded to ubuntu 14.04, heroku cedar-14
+  Wercker box with Ubuntu 12.04 upgraded to Ubuntu 14.04, heroku cedar-14
   packages installed, ruby 2.1.5 via rbenv, postgres 9.3 with postgis support.
   GEOS and PROJ libraries available for rgeo gem. This box provides basic
-  environment for geo applications.
+  environment for ruby geo applications.
 keywords:
   - geo
   - ruby
   - postgis
   - geos
+packages:
+  - postgresql@9.3
+  - postgis@2.1
+  - geos@3.4.2
+  - proj@4.8.0
 script: |
   sudo apt-get update -y
   sudo apt-get install -y --force-yes autoconf bind9-host bison build-essential coreutils curl daemontools dnsutils ed git imagemagick iputils-tracepath language-pack-en libbz2-dev libcurl4-openssl-dev libevent-dev libglib2.0-dev libjpeg-dev libmagickwand-dev libncurses5-dev libpq-dev libpq5 libreadline6-dev libssl-dev libxml2-dev libxslt-dev netcat-openbsd openssh-client openssh-server postgresql-server-dev-9.3 python python-dev ruby ruby-dev socat syslinux tar telnet zip zlib1g-dev
@@ -36,4 +41,15 @@ script: |
   ~/.rbenv/shims/gem install bundler --no-rdoc --no-ri
   ~/.rbenv/shims/gem install rgeo --no-rdoc --no-ri
   ~/.rbenv/shims/ruby -e 'require "rgeo";puts "RGeo GEOS supported: #{RGeo::Geos.supported? ? "yes":"no"}"'
+  sudo -- sh -c "echo 'host all wercker $HOST/32 md5' > /etc/postgresql/9.3/main/pg_hba.conf"
+  sudo -u postgres createdb werkerdb$TEST_ENV_NUMBER -U postgres
+  sudo -u postgres psql -c 'CREATE EXTENSION postgis;' -U postgres -d werckerdb$TEST_ENV_NUMBER
+  sudo -u postgres psql -c 'CREATE EXTENSION postgis_topology;' -U postgres -d werckerdb$TEST_ENV_NUMBER
   rm -rf /tmp/*
+env:
+  WERCKER_POSTGRESQL_USERNAME: postgres
+  WERCKER_POSTGRESQL_PASSWORD: wercker
+  WERCKER_POSTGRESQL_PORT: 5432
+  WERCKER_POSTGRESQL_DATABASE: werckerdb
+  WERCKER_POSTGRESQL_URL: postgres://postgres:wercker@$$HOST$$:5432/werckerdb$$TEST_ENV_NUMBER$$
+  WERCKER_POSTGRESQL_HOST: $$HOST$$
