@@ -1,5 +1,5 @@
 name: ubuntu14-ruby-geo
-version: 0.1.3
+version: 0.1.4
 inherits: ruudk/ubuntu14.04@1.0.0
 type: main
 platform: ubuntu@12.04
@@ -22,9 +22,7 @@ packages:
 script: |
   sudo apt-get update -y
   sudo apt-get install -y --force-yes postgresql-9.3-postgis-2.1 autoconf bind9-host bison build-essential coreutils curl daemontools dnsutils ed git imagemagick iputils-tracepath language-pack-en libbz2-dev libcurl4-openssl-dev libevent-dev libglib2.0-dev libjpeg-dev libmagickwand-dev libncurses5-dev libpq-dev libpq5 libreadline6-dev libssl-dev libxml2-dev libxslt-dev netcat-openbsd openssh-client openssh-server postgresql-server-dev-9.3 python python-dev ruby ruby-dev socat syslinux tar telnet zip zlib1g-dev
-  sudo -- sh -c "echo 'local postgres all trust' >> /etc/postgresql/9.3/main/pg_hba.conf"
-  sudo -- sh -c "echo 'host all wercker 0.0.0.0/0 md5' >> /etc/postgresql/9.3/main/pg_hba.conf"
-  sudo -- sh -c "echo 'host all wercker ::/0 md5' >> /etc/postgresql/9.3/main/pg_hba.conf"
+  if sudo grep -Exq '^local\s+all\s+postgres\s+\w+' /etc/postgresql/9.3/main/pg_hba.conf; then sudo sed -i -r -e 's/local\s+all\s+postgres\s+\w+/local all postgres  trust/' /etc/postgresql/9.3/main/pg_hba.conf; else sudo -- sh -c "echo 'local all postgres  trust' >> /etc/postgresql/9.3/main/pg_hba.conf"; fi
   cd / && sudo rm -rf /var/cache/apt/archives/*.deb
   curl -sL https://s3-us-west-2.amazonaws.com/plandex-heroku/cedar-14/proj-4.8.0-1.tar.gz -o /tmp/proj.tar.gz
   curl -sL https://s3-us-west-2.amazonaws.com/plandex-heroku/cedar-14/geos-3.4.2-1.tar.gz -o /tmp/geos.tar.gz
@@ -44,5 +42,6 @@ script: |
   ~/.rbenv/shims/gem install bundler --no-rdoc --no-ri
   ~/.rbenv/shims/gem install rgeo --no-rdoc --no-ri
   ~/.rbenv/shims/ruby -e 'require "rgeo";puts "RGeo GEOS supported: #{RGeo::Geos.supported? ? "yes":"no"}"'
+  echo 'restarting postgresql 9.3 to ensure that configuration is correct'
   sudo service postgresql restart
   rm -rf /tmp/*
