@@ -4,7 +4,7 @@
 # install packages
 # -------------------------
 sudo apt-get update -y
-sudo apt-get install -y --force-yes postgresql-9.3-postgis-2.1 autoconf bind9-host \
+sudo apt-get install -y --force-yes postgresql-9.4-postgis-2.1 autoconf bind9-host \
                                     bison build-essential coreutils curl daemontools \
                                     dnsutils ed git imagemagick iputils-tracepath \
                                     language-pack-en libbz2-dev libcurl4-openssl-dev \
@@ -12,7 +12,7 @@ sudo apt-get install -y --force-yes postgresql-9.3-postgis-2.1 autoconf bind9-ho
                                     libmagickwand-dev libncurses5-dev libpq-dev libpq5 \
                                     libreadline6-dev libssl-dev libxml2-dev libxslt-dev \
                                     netcat-openbsd openssh-client openssh-server \
-                                    postgresql-server-dev-9.3 python python-dev \
+                                    postgresql-server-dev-9.4 python python-dev \
                                     ruby ruby-dev socat syslinux tar telnet zip zlib1g-dev
 cd / && sudo rm -rf /var/cache/apt/archives/*.deb
 
@@ -23,10 +23,10 @@ dbname="werckerdb"
 user="postgres"
 passwrod="wercker"
 # configure access for local postgres user
-if sudo grep -Exq '^local\s+all\s+postgres\s+\w+' /etc/postgresql/9.3/main/pg_hba.conf; then
-    sudo sed -i -r -e 's/local\s+all\s+postgres\s+\w+/local all postgres  trust/' /etc/postgresql/9.3/main/pg_hba.conf
+if sudo grep -Exq '^local\s+all\s+postgres\s+\w+' /etc/postgresql/9.4/main/pg_hba.conf; then
+    sudo sed -i -r -e 's/local\s+all\s+postgres\s+\w+/local all postgres  trust/' /etc/postgresql/9.4/main/pg_hba.conf
 else
-    sudo -- sh -c "echo 'local all postgres  trust' >> /etc/postgresql/9.3/main/pg_hba.conf"
+    sudo -- sh -c "echo 'local all postgres  trust' >> /etc/postgresql/9.4/main/pg_hba.conf"
 fi
 # configure access for local database access
 if sudo grep -Exq '^host\s+${dbname}\s+${user}\s+0\.0\.0\.0\/32\s+\w+' /etc/postgresql/9.3/main/pg_hba.conf; then
@@ -82,9 +82,9 @@ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 export PATH="$HOME/.rbenv/bin:$PATH"
 rbenv init -
-rbenv install 2.1.5
+rbenv install 2.2.1
 rbenv rehash
-rbenv global 2.1.5
+rbenv global 2.2.1
 ~/.rbenv/shims/ruby --version
 ~/.rbenv/shims/gem install bundler --no-rdoc --no-ri
 ~/.rbenv/shims/gem install rgeo --no-rdoc --no-ri

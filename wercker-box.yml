@@ -1,12 +1,12 @@
 name: ubuntu14-ruby-geo
-version: 0.1.5
+version: 0.2.1
 inherits: ruudk/ubuntu14.04@1.0.0
 type: main
 platform: ubuntu@12.04
 no-response-timeout: 10
 description: |
   Wercker box with Ubuntu 12.04 upgraded to Ubuntu 14.04, heroku cedar-14
-  packages installed, ruby 2.1.5 via rbenv, postgres 9.3 with postgis support.
+  packages installed, ruby 2.2.1 via rbenv, postgres 9.3 with postgis support.
   GEOS and PROJ libraries available for rgeo gem. This box provides basic
   environment for ruby geo applications.
 keywords:
@@ -15,7 +15,7 @@ keywords:
   - postgis
   - geos
 packages:
-  - postgresql@9.3
+  - postgresql@9.4
   - postgis@2.1
   - geos@3.4.2
   - proj@4.8.0
@@ -24,3 +24,4 @@ env:
   WERCKER_POSTGRESQL_USERNAME: postgres
   WERCKER_POSTGRESQL_PASSWORD: wercker
   WERCKER_POSTGRESQL_DATABASE: werckerdb
+  WERCKER_POSTGRESQL_ADAPTER: postgis
